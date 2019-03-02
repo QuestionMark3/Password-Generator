@@ -93,10 +93,11 @@ update = () => {
     // Removing strength when a new password is generated and general formatting
     if (strenTxt.innerHTML !== ''){
         strenTxt.innerHTML = '';
+        let container = document.getElementById("container");
         let options = document.getElementById('options');
         let brk = document.createElement("br");
         brk.id = 'break';
-        document.body.insertBefore(brk, options);
+        container.insertBefore(brk, options);
     }
 }
 
@@ -108,9 +109,10 @@ test = () => {
 	strenTxt.innerHTML = stren[0];
 	strenTxt.style.color = stren[1];
     // General formatting 
+    let container = document.getElementById("container");
 	let brk = document.getElementById("break");
 	if (brk !== null){
-		document.body.removeChild(brk);
+		container.removeChild(brk);
 	}
 }
 
