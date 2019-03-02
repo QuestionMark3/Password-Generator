@@ -6,6 +6,7 @@ const symbols = '!"#$%&\'()*+,-./:;<=>?@^[\\]^_`{|}~';
 
 // Function for calculating intersection of two char arrays converted from strings
 intersection = (str1, str2) => {
+	str1 = str1 + '';
     let charArr1 = str1.split('');
     let charArr2 = str2.split('');
     let interArr = charArr1.filter( value => charArr2.includes(value) );
@@ -61,26 +62,59 @@ entropy = (password) => {
 strength = (entrop) => {
     let stren;
     if (entrop < 28){
-        stren = 'Very Weak';
+        stren = ['Very Weak', 'Brown'];
     }
     else if (entrop <= 35){
-        stren = 'Weak';
+        stren = ['Weak', 'Red'];
     }
     else if (entrop <= 59){
-        stren = 'Reasonable';
+        stren = ['Reasonable', 'Orange'];
     }
     else if (entrop <= 127){
-        stren = 'Strong';
+        stren = ['Strong', 'Green'];
     }
     else {
-        stren = 'Very Strong';
+        stren = ['Very Strong', '#ffd700'];
     }
     return stren;
 }
 
-password = generate(20, false);
-entropy = entropy(password);
-strength = strength(entropy);
-console.log(`PASSWORD: ${password}`);
-console.log(` ENTROPY: ${entropy}`);
-console.log(`STRENGTH: ${strength}`);
+// Event listener that calls generate() and enters the password to the input field
+update = () => {
+	let field = document.getElementById('password');
+    let low = document.getElementById('low').checked;
+    let up = document.getElementById('up').checked;
+    let num = document.getElementById('num').checked;
+    let sym = document.getElementById('sym').checked;
+	let password = generate(20, sym, up, num, low);
+	field.value = password;
+    let strenTxt = document.getElementById('strength');
+    let brk = document.getElementById("break");
+    // Removing strength when a new password is generated and general formatting
+    if (strenTxt.innerHTML !== ''){
+        strenTxt.innerHTML = '';
+        let options = document.getElementById('options');
+        let brk = document.createElement("br");
+        brk.id = 'break';
+        document.body.insertBefore(brk, options);
+    }
+}
+
+// Event listener that calls strength() and displays the value
+test = () => {
+	let strenTxt = document.getElementById('strength');
+	let password = document.getElementById('password').value;
+	let stren = strength(entropy(password));
+	strenTxt.innerHTML = stren[0];
+	strenTxt.style.color = stren[1];
+    // General formatting 
+	let brk = document.getElementById("break");
+	if (brk !== null){
+		document.body.removeChild(brk);
+	}
+}
+
+let gen = document.getElementById("gen");
+let tes = document.getElementById("test");
+gen.addEventListener("click", update);
+tes.addEventListener("click", test);
