@@ -71,7 +71,7 @@ strength = (entrop) => {
         stren = ['Reasonable', 'Orange'];
     }
     else if (entrop <= 127){
-        stren = ['Strong', 'Green'];
+        stren = ['Strong', '#22dd00'];
     }
     else {
         stren = ['Very Strong', '#ffd700'];
@@ -120,3 +120,9 @@ let gen = document.getElementById("gen");
 let tes = document.getElementById("test");
 gen.addEventListener("click", update);
 tes.addEventListener("click", test);
+document.addEventListener("keydown", event => {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   tes.click();
+  }
+});
