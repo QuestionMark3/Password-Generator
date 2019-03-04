@@ -13,6 +13,13 @@ intersection = (str1, str2) => {
     return interArr;
 }
 
+clearStrength = () => {
+    let elArr = document.getElementsByClassName('val');
+    for (el of elArr){
+        el.style.opacity = 0;
+    }
+}
+
 // Function for randomly generating password
 // Key Pool parameters are booleans that specifying what characters are used
 generate = (length = 12, sym = true, caps = true, num = true, low = true) => {
@@ -62,7 +69,7 @@ entropy = (password) => {
 strength = (entrop) => {
     let stren;
     if (entrop < 28){
-        stren = ['Very Weak', 'Brown'];
+        stren = ['Very Weak', 'Black'];
     }
     else if (entrop <= 35){
         stren = ['Weak', 'Red'];
@@ -74,7 +81,7 @@ strength = (entrop) => {
         stren = ['Strong', '#22dd00'];
     }
     else {
-        stren = ['Very Strong', '#ffd700'];
+        stren = ['Very Strong', 'Yellow'];
     }
     return stren;
 }
@@ -82,44 +89,41 @@ strength = (entrop) => {
 // Event listener that calls generate() and enters the password to the input field
 update = () => {
 	let field = document.getElementById('password');
+    let count = document.getElementById('count').value;
     let low = document.getElementById('low').checked;
     let up = document.getElementById('up').checked;
     let num = document.getElementById('num').checked;
     let sym = document.getElementById('sym').checked;
-	let password = generate(20, sym, up, num, low);
+	let password = generate(count, sym, up, num, low);
 	field.value = password;
-    let strenTxt = document.getElementById('strength');
-    let brk = document.getElementById("break");
-    // Removing strength when a new password is generated and general formatting
-    if (strenTxt.innerHTML !== ''){
-        strenTxt.innerHTML = '';
-        let container = document.getElementById("container");
-        let options = document.getElementById('options');
-        let brk = document.createElement("br");
-        brk.id = 'break';
-        container.insertBefore(brk, options);
-    }
+    clearStrength();
 }
-
+    
 // Event listener that calls strength() and displays the value
 test = () => {
-	let strenTxt = document.getElementById('strength');
 	let password = document.getElementById('password').value;
+    let block = document.getElementById('container');
 	let stren = strength(entropy(password));
-	strenTxt.innerHTML = stren[0];
-	strenTxt.style.color = stren[1];
-    // General formatting 
-    let container = document.getElementById("container");
-	let brk = document.getElementById("break");
-	if (brk !== null){
-		container.removeChild(brk);
-	}
+    let el = document.getElementById(stren[0]);
+    el.style.opacity = 1;
+    // Contaier color transitions to color associated with strength
+    block.style.backgroundColor = stren[1];
+    // Container color transitions back to blue after 400ms
+    timer = setInterval(f => {
+        block.style.backgroundColor = '#3f69aa';
+        clearInterval(timer);
+    },400);
 }
 
 let gen = document.getElementById("gen");
 let tes = document.getElementById("test");
+let field = document.getElementById('password')
+
 gen.addEventListener("click", update);
 tes.addEventListener("click", test);
+field.addEventListener("focus", clearStrength);
+
+// Enter key bound to "test" button
 document.addEventListener("keydown", event => {
   if (event.keyCode === 13) {
    event.preventDefault();
