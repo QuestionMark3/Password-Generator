@@ -105,6 +105,7 @@ test = () => {
     let block = document.getElementById('container');
 	let stren = strength(entropy(password));
     let el = document.getElementById(stren[0]);
+    clearStrength();
     el.style.opacity = 1;
     // Contaier color transitions to color associated with strength
     block.style.backgroundColor = stren[1];
